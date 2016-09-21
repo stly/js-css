@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <title>JCompare</title>
+  <script src='js/jquery.js'></script>
+  <style type="text/css">
+  label {width: 50px; display: inline-block;}
+  img {width: 100px;}
+  img.list-img {width: 50px;}
+  img.on{border: 1px solid red; }
+  </style>
+</head>
+<body>
+  <form id='form'>
+    <label >name: </label>
+    <input name='name' ></input>
+    <br/>
+    <label >age: </label>
+    <input name='age' >age: </input>
+  </form>
+  <button class='empty'>置空</button>
+  <button class='restore'>还原</button>
+  <button class='check'>是否改变了</button>
+  <br>
+  <div class='show-img' id='show_img'>
+  </div>
+</body>
+<script type="text/javascript">
+$(document).ready(function() {
+      //获取的数据 图片
+      var show_img_div = $('#show_img');
+      var img_url_array = ['img/dog.jpg', 'img/dog.jpg','img/dog.jpg','img/dog.jpg'];
+      var attachment_id_array = [1, 2, 3, 4];
+      for (var i = 0; i < img_url_array.length; i++) {
+        var img_ele = $('<img >');
+        $(show_img).append(img_ele.attr('src', img_url_array[i]));
+      };
+     //图片展示
+     $('img').click(function(event) {
+      $('img.on').removeClass('on');
+      $(this).addClass('on');
+      var index = $(show_img_div).find('img').index($(this));
+      console.log('index: ' + index);
+    });
+    //一开始数据填充
+    $("form input[name='name']").val('origin_yang');
+    $("form input[name='age']").val('origin_1000');
+    //form_temp 要在一开始的时候获取
+    var origin_form = $('#form').clone();  
+    $('button.restore').click(function(event) {
+      $('#form').replaceWith(origin_form.clone());
+      //给新的form绑定事件
+    });
+    $('button.empty').click(function(event) {
+      //jquery 没有reseset方法 dom有reset方法
+      $('#form')[0].reset();
+    });
+    //保存原始form的数据
+    var origin_form_data = $('#form').serialize();
+    function is_form_changed () {
+      var current_form_data = $('#form').serialize();
+      if(origin_form_data == current_form_data){
+        console.log('false');
+        return false;
+      }else{
+        console.log('true');
+        return true;
+      }
+    }
+    $('button.check').click(function(event) {
+      if(is_form_changed()){
+        alert('changed');
+      }else{
+        alert('no changed');
+      }
+    });
+  });
+</script>
+</html>
